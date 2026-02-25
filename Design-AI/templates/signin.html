@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sign In</title>
+
+<style>
+:root{
+  --bg0:#0b0017;
+  --bg2:#2b045a;
+  --pink:#ff18c8;
+  --violet:#8a49ff;
+
+  --text:rgba(255,255,255,.94);
+  --muted:rgba(255,255,255,.65);
+
+  --panel:rgba(43,4,90,.55);
+  --panelBorder:rgba(255,255,255,.14);
+
+  --btnBg:rgba(255,255,255,.08);
+  --btnHover:rgba(255,255,255,.14);
+  --btnBorder:rgba(255,255,255,.18);
+
+  --emailGradient:linear-gradient(135deg,#ff18c8,#8a49ff);
+
+  --badgeBg:rgba(255,255,255,.12);
+  --badgeText:white;
+}
+
+*{box-sizing:border-box}
+html,body{height:100%}
+
+body{
+  margin:0;
+  font-family:ui-sans-serif,system-ui;
+  color:var(--text);
+
+  background:
+    radial-gradient(900px 650px at 12% 18%, rgba(255,24,200,.62), transparent 62%),
+    radial-gradient(1050px 800px at 86% 16%, rgba(138,73,255,.48), transparent 64%),
+    linear-gradient(135deg,var(--bg0) 0%,var(--bg2) 100%);
+
+  display:grid;
+  place-items:center;
+}
+
+.overlay{
+  position:fixed;
+  inset:0;
+  display:grid;
+  place-items:center;
+  background:rgba(10,0,20,.45);
+  backdrop-filter:blur(10px);
+}
+
+.modal{
+  width:min(440px,92vw);
+  border-radius:22px;
+  background:var(--panel);
+  border:1px solid var(--panelBorder);
+  backdrop-filter:blur(30px);
+  box-shadow:0 50px 140px rgba(0,0,0,.6);
+  padding:30px;
+  animation:fade .18s ease-out;
+}
+
+@keyframes fade{
+  from{opacity:0; transform:translateY(8px)}
+  to{opacity:1; transform:translateY(0)}
+}
+
+h1{
+  margin:0 0 6px;
+  font-size:28px;
+  font-weight:700;
+  letter-spacing:-.02em;
+}
+
+.sub{
+  margin:0 0 22px;
+  color:var(--muted);
+  font-size:15px;
+}
+
+.stack{
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+}
+
+.btn{
+  height:46px;
+  border-radius:14px;
+  border:1px solid var(--btnBorder);
+  background:var(--btnBg);
+  color:white;
+  font-weight:600;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  cursor:pointer;
+  position:relative;
+  transition:.18s ease;
+}
+
+.btn:hover{
+  background:var(--btnHover);
+  transform:translateY(-2px);
+}
+
+.icon{
+  width:18px;
+  height:18px;
+}
+
+/* Email button */
+.btn-email{
+  background:var(--emailGradient);
+  border:none;
+  box-shadow:0 20px 60px rgba(255,24,200,.35);
+}
+
+.btn-email:hover{
+  transform:translateY(-2px) scale(1.01);
+}
+
+/* Divider */
+.divider{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  font-size:12px;
+  font-weight:700;
+  color:rgba(255,255,255,.5);
+}
+
+.divider::before,
+.divider::after{
+  content:"";
+  height:1px;
+  flex:1;
+  background:rgba(255,255,255,.15);
+}
+
+/* Badge */
+.badge{
+  position:absolute;
+  right:12px;
+  padding:4px 8px;
+  border-radius:999px;
+  font-size:10px;
+  font-weight:700;
+  background:var(--badgeBg);
+  color:var(--badgeText);
+  display:none;
+}
+
+/* SSO */
+.sso{
+  margin-top:18px;
+  padding-top:14px;
+  border-top:1px solid rgba(255,255,255,.15);
+  font-size:12px;
+  color:rgba(255,255,255,.55);
+  text-align:center;
+}
+</style>
+</head>
+
+<body>
+
+<div class="overlay">
+  <div class="modal">
+
+    <h1>Start Building.</h1>
+    <p class="sub">Log in to your account</p>
+
+    <div class="stack">
+
+      <!-- GOOGLE -->
+      <button class="btn" onclick="window.location.href='/auth/google'">
+        <svg class="icon" viewBox="0 0 48 48">
+          <path fill="#EA4335" d="M24 9.5c3.1 0 5.9 1.1 8.1 3.2l6-6C34.5 2.7 29.6.5 24 .5 14.7.5 6.7 5.8 2.9 13.5l7 5.4C11.7 13.2 17.4 9.5 24 9.5z"/>
+          <path fill="#4285F4" d="M46.5 24.5c0-1.6-.2-3.1-.5-4.5H24v9h12.6c-.5 2.6-2 4.8-4.2 6.3l6.4 4.9c3.7-3.4 7.7-8.4 7.7-15.7z"/>
+          <path fill="#FBBC05" d="M9.9 28.9c-.5-1.5-.8-3.1-.8-4.7s.3-3.2.8-4.7l-7-5.4C1.1 17.6.5 21 .5 24.2c0 3.2.6 6.6 2.4 9.6l7-4.9z"/>
+          <path fill="#34A853" d="M24 47.5c5.6 0 10.3-1.9 13.7-5.2l-6.4-4.9c-1.8 1.2-4.1 1.9-7.3 1.9-6.6 0-12.3-3.7-14.1-9.4l-7 4.9C6.7 42.2 14.7 47.5 24 47.5z"/>
+        </svg>
+        Continue with Google
+        <span class="badge" id="googleBadge">Last used</span>
+      </button>
+
+      <!-- GITHUB -->
+      <button class="btn" onclick="window.location.href='/auth/github'">
+        <svg class="icon" viewBox="0 0 16 16" fill="white">
+          <path d="M8 .2a8 8 0 0 0-2.53 15.6c.4.08.55-.17.55-.38v-1.33c-2.24.49-2.71-1.08-2.71-1.08-.36-.93-.9-1.18-.9-1.18-.74-.5.05-.49.05-.49.82.06 1.25.85 1.25.85.73 1.25 1.9.89 2.36.68.07-.53.28-.89.5-1.1-1.79-.2-3.67-.9-3.67-4a3.1 3.1 0 0 1 .83-2.16 2.88 2.88 0 0 1 .08-2.13s.67-.22 2.2.83a7.6 7.6 0 0 1 4 0c1.52-1.05 2.2-.83 2.2-.83.43 1.2.16 2.09.08 2.13.52.57.83 1.3.83 2.16 0 3.12-1.88 3.8-3.68 4 .29.25.54.74.54 1.49v2.2c0 .21.15.46.55.38A8 8 0 0 0 8 .2z"/>
+        </svg>
+        Continue with GitHub
+        <span class="badge" id="githubBadge">Last used</span>
+      </button>
+
+      <!-- APPLE -->
+      <button class="btn" onclick="window.location.href='/auth/apple'">
+        <svg class="icon" viewBox="0 0 24 24" fill="white">
+          <path d="M16.365 1.43c0 1.14-.47 2.2-1.22 2.97-.77.8-2.05 1.42-3.19 1.33-.15-1.11.45-2.29 1.17-3.02.8-.8 2.2-1.37 3.24-1.28zM21.5 17.1c-.56 1.29-.82 1.86-1.54 3.02-1 1.63-2.4 3.66-4.13 3.67-1.54.02-1.94-1-4.02-.99-2.08.01-2.52 1-4.06.98-1.73-.02-3.06-1.84-4.06-3.47C.66 17.03-.39 12.76 1.9 9.27c1.14-1.74 3.18-2.84 5.1-2.86 1.6-.03 3.11 1.08 4.02 1.08.91 0 2.6-1.34 4.39-1.14.75.03 2.85.3 4.2 2.27-3.69 2.03-3.09 7.32.89 8.48z"/>
+        </svg>
+        Continue with Apple
+      </button>
+
+      <div class="divider">OR</div>
+
+      <button class="btn btn-email" onclick="window.location.href='/signin-email'">
+        Continue with email
+      </button>
+
+    </div>
+
+    <div class="sso">
+      🔒 SSO available on Business and Enterprise plans
+    </div>
+
+  </div>
+</div>
+
+<script>
+const last = localStorage.getItem("lastLoginProvider");
+if(last === "google") document.getElementById("googleBadge").style.display="inline-block";
+if(last === "github") document.getElementById("githubBadge").style.display="inline-block";
+</script>
+
+</body>
+</html>

@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>AI Builder</title>
+
+<style>
+:root{
+  --bg0:#0b0017;
+  --bg2:#2b045a;
+  --text:rgba(255,255,255,.92);
+  --muted:rgba(255,255,255,.55);
+  --glass:rgba(255,255,255,.06);
+  --stroke:rgba(255,255,255,.14);
+  --pink:#ff18c8;
+  --violet:#8a49ff;
+}
+
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  font-family:ui-sans-serif,system-ui;
+  color:var(--text);
+  height:100vh;
+  display:flex;
+  background:
+    radial-gradient(900px 650px at 12% 18%, rgba(255,24,200,.62), transparent 62%),
+    linear-gradient(135deg, var(--bg0) 0%, var(--bg2) 100%);
+}
+
+/* LEFT SIDEBAR */
+.sidebar{
+  width:240px;
+  background:rgba(0,0,0,.35);
+  backdrop-filter:blur(20px);
+  border-right:1px solid var(--stroke);
+  padding:20px;
+  display:flex;
+  flex-direction:column;
+}
+
+.file-list{
+  margin-top:20px;
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+
+.file-item{
+  padding:8px 10px;
+  border-radius:8px;
+  background:rgba(255,255,255,.05);
+  cursor:pointer;
+  font-size:14px;
+}
+
+.file-item:hover{
+  background:rgba(255,255,255,.15);
+}
+
+/* MAIN */
+.main{
+  flex:1;
+  display:flex;
+  flex-direction:column;
+}
+
+.header{
+  padding:20px;
+  border-bottom:1px solid var(--stroke);
+  display:flex;
+  justify-content:space-between;
+}
+
+/* BUILDER SPLIT */
+.builder{
+  flex:1;
+  display:flex;
+  overflow:hidden;
+}
+
+/* CODE PANEL */
+.code-panel{
+  width:50%;
+  background:#0f0f12;
+  border-right:1px solid var(--stroke);
+  display:flex;
+  flex-direction:column;
+}
+
+.code-header{
+  padding:12px;
+  font-size:14px;
+  border-bottom:1px solid rgba(255,255,255,.1);
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+#editor{
+  flex:1;
+  background:#0d0d0d;
+  color:#ddd;
+  border:none;
+  padding:15px;
+  font-family:monospace;
+  resize:none;
+  outline:none;
+}
+
+/* PREVIEW PANEL */
+.preview-panel{
+  width:50%;
+  background:#111;
+}
+
+.preview-panel iframe{
+  width:100%;
+  height:100%;
+  border:none;
+  background:white;
+}
+
+/* INPUT AREA */
+.input-area{
+  padding:15px;
+  border-top:1px solid var(--stroke);
+  display:flex;
+  gap:12px;
+}
+
+.prompt{
+  flex:1;
+  resize:none;
+  padding:14px;
+  border-radius:12px;
+  border:1px solid var(--stroke);
+  background:rgba(255,255,255,.05);
+  color:white;
+}
+
+button{
+  padding:12px 20px;
+  border:none;
+  border-radius:10px;
+  background:linear-gradient(135deg,#ff18c8,#8a49ff);
+  color:white;
+  cursor:pointer;
+}
+</style>
+</head>
+
+<body>
+
+<div class="sidebar">
+  <h3>{{ project.name }}</h3>
+
+  <div class="file-list">
+    {% for file in files %}
+      <div class="file-item" onclick="loadFile('{{ file.id }}', '{{ file.filename }}')">
+        '
+        {{ file.filename }}
+      </div>
+    {% endfor %}
+  </div>
+
+  <div style="margin-top:auto;">
+    <a href="/logout" style="color:white;">Logout</a>
+  </div>
+</div>
+
+<div class="main">
+
+  <div class="header">
+    <div>AI Builder</div>
+    <div>Welcome {{ user.name }}</div>
+  </div>
+
+  <div class="builder">
+
+    <div class="code-panel">
+      <div class="code-header">
+        <span id="currentFile">Select a file</span>
+        <button onclick="saveFile()">Save</button>
+      </div>
+      <textarea id="editor"></textarea>
+    </div>
+
+    <div class="preview-panel">
+      <iframe id="previewFrame" src="/preview/{{ project.id }}"></iframe>
+    </div>
+
+  </div>
+
+  <div class="input-area">
+    <textarea class="prompt" id="messageInput" placeholder="Describe what to build..."></textarea>
+    <button onclick="generate()">Generate</button>
+  </div>
+
+</div>
+
+<script>
+let activeFileId = null;
+
+function loadFile(fileId, filename){
+  activeFileId = fileId;
+  document.getElementById("currentFile").innerText = filename;
+
+  fetch("/file/" + fileId)
+    .then(res => res.text())
+    .then(data => {
+      document.getElementById("editor").value = data;
+    });
+}
+
+function saveFile(){
+  if(!activeFileId) return;
+
+  fetch("/save-file/" + activeFileId, {
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({
+      content: document.getElementById("editor").value
+    })
+  })
+  .then(res=>res.json())
+  .then(data=>{
+    if(data.success){
+      document.getElementById("previewFrame").src =
+        "/preview/{{ project.id }}?t=" + new Date().getTime();
+    }
+  });
+}
+
+async function generate(){
+  const message = document.getElementById("messageInput").value.trim();
+  if(!message) return;
+
+  await fetch("/api/chat", {
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({message})
+  });
+
+  location.reload();
+}
+</script>
+
+</body>
+</html>

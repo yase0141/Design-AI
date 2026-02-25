@@ -1,0 +1,483 @@
+<!doctype html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Design App</title>
+
+<style>
+:root{
+  --bg0:#0b0017;
+  --bg1:#120022;
+  --bg2:#2b045a;
+
+  --text: rgba(255,255,255,.92);
+  --muted: rgba(255,255,255,.65);
+
+  --pink:#ff18c8;
+  --violet:#8a49ff;
+}
+
+*{box-sizing:border-box;}
+html,body{height:100%;}
+
+body{
+  margin:0;
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto;
+  color:var(--text);
+  overflow-x:hidden;
+
+  background:
+    radial-gradient(900px 650px at 12% 18%, rgba(255,24,200,.62), transparent 62%),
+    radial-gradient(1050px 800px at 86% 16%, rgba(138,73,255,.48), transparent 64%),
+    linear-gradient(135deg, var(--bg0) 0%, var(--bg2) 55%, var(--bg1) 100%);
+  background-attachment: fixed;
+}
+
+/* NAVBAR */
+header{ padding:18px 20px; }
+.navbar{
+  max-width:1100px;
+  margin:auto;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:12px 18px;
+  border-radius:999px;
+  background:rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.12);
+  backdrop-filter:blur(18px);
+}
+.brand{ display:flex; align-items:center; gap:10px; font-weight:600; }
+.brand-badge{
+  width:26px; height:26px; border-radius:8px;
+  background:linear-gradient(135deg,var(--pink),var(--violet));
+}
+nav a{ color:rgba(255,255,255,.75); text-decoration:none; margin:0 10px; font-size:14px; }
+.nav-right a{
+  margin-left:10px; padding:8px 14px; border-radius:999px; text-decoration:none;
+  font-weight:600; font-size:14px; border:1px solid rgba(255,255,255,.15);
+  background:rgba(255,255,255,.08); color:white;
+}
+.nav-right .primary{ background:linear-gradient(135deg,var(--pink),var(--violet)); border:none; }
+
+/* HERO */
+.hero{
+  text-align:center;
+  padding:120px 20px 80px;
+  max-width:1100px;
+  margin:auto;
+}
+.hero h1{ font-size:56px; margin:0; line-height:1.05; }
+.hero p{ margin-top:14px; font-size:18px; color:var(--muted); }
+
+/* PROMPT */
+.prompt{ 
+  margin:60px auto 0; 
+  max-width:920px;  
+}
+
+.prompt-inner{
+  border-radius:40px;
+  background:rgba(18,18,22,.78);
+  border:1px solid rgba(255,255,255,.10);
+  backdrop-filter:blur(20px);
+  box-shadow:0 30px 70px rgba(0,0,0,.6), 0 2px 0 rgba(255,255,255,.03) inset;
+  display:flex;
+  align-items:flex-end;
+  padding:28px 28px;
+  gap:12px;
+  position:relative;
+}
+
+.icon-btn{
+  width:44px; height:44px; border-radius:999px;
+  background:rgba(255,255,255,.08);
+  border:1px solid rgba(255,255,255,.15);
+  color:white;
+  font-weight:800;
+  font-size:16px;
+  cursor:pointer;
+  transition:.15s ease;
+  flex:0 0 auto;
+  display:inline-flex; align-items:center; justify-content:center;
+}
+.icon-btn:hover{ transform:translateY(-1px); background:rgba(255,255,255,.11); }
+
+.textwrap{ position:relative; flex:1 1 auto; min-width:0; }
+
+.prompt-text{
+  width:100%;
+  border:none;
+  outline:none;
+  background:transparent;
+  color:white;
+  font-size:16px;
+  line-height:1.35;
+  padding:10px 0;
+  resize:none;
+  min-height:44px;
+  max-height:140px;
+  overflow-y:auto;
+  scrollbar-width: thin;
+}
+/* hide native placeholder, we use animated overlay */
+.prompt-text::placeholder{ color:transparent; }
+
+.ph{
+  position:absolute;
+  left:0;
+  top:50%;
+  transform:translateY(-50%);
+  pointer-events:none;
+  color:rgba(255,255,255,.45);
+  font-size:16px;
+  line-height:1.35;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  max-width:100%;
+}
+.ph .caret{
+  display:inline-block;
+  width:10px;
+  margin-left:2px;
+  opacity:.9;
+  animation: blink 1s step-end infinite;
+}
+@keyframes blink { 50% { opacity: 0; } }
+
+.right-actions{ display:flex; align-items:center; gap:10px; flex:0 0 auto; }
+
+.plan-badge{
+  font-size:13px;
+  color:rgba(255,255,255,.60);
+  padding:8px 10px;
+  border-radius:999px;
+  background:rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.10);
+}
+
+.send-btn{
+  width:44px; height:44px; border-radius:999px;
+  border:none;
+  background:linear-gradient(135deg,var(--pink),var(--violet));
+  color:white;
+  font-size:18px;
+  font-weight:900;
+  cursor:pointer;
+  transition:.15s ease;
+  box-shadow:0 18px 40px rgba(255,24,200,.25);
+}
+.send-btn:hover{ transform:translateY(-1px); box-shadow:0 22px 52px rgba(255,24,200,.28); }
+
+.send-btn:disabled{
+  background: rgba(255,255,255,.12);
+  box-shadow:none;
+  cursor:not-allowed;
+  opacity:.6;
+}
+
+.prompt-hint{
+  margin-top:12px;
+  font-size:13px;
+  color:rgba(255,255,255,.55);
+  text-align:center;
+}
+
+/* mic svg */
+.mic svg{ width:18px; height:18px; opacity:.9; }
+.mic:hover svg{ opacity:1; }
+
+/* ===== Locked controls (when logged out) ===== */
+.locked{
+  opacity:.55;
+  cursor:default !important;
+}
+.locked:hover{
+  transform:none !important;
+  background:rgba(255,255,255,.08) !important;
+}
+
+/* Tooltip / Popover like Lovable */
+.lockwrap{
+  position:relative;
+  display:inline-flex;
+}
+.popover{
+  position:absolute;
+  left: 0;
+  top: calc(100% + 10px);
+  width: 260px;
+  padding: 14px 14px 12px;
+  border-radius: 18px;
+  background: rgba(18,18,22,.92);
+  border: 1px solid rgba(255,255,255,.14);
+  box-shadow: 0 30px 90px rgba(0,0,0,.65);
+  display:none;
+  text-align:left;
+  z-index:50;
+}
+.lockwrap:hover .popover{ display:block; }
+
+.popover .t{ font-weight:800; margin-bottom:6px; }
+.popover .d{ color:rgba(255,255,255,.65); font-size:13px; line-height:1.45; }
+.popover .cta{
+  margin-top:10px;
+  display:flex;
+  justify-content:flex-end;
+}
+.popover a{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding:10px 14px;
+  border-radius:999px;
+  background:rgba(255,255,255,.92);
+  color:#111;
+  text-decoration:none;
+  font-weight:800;
+  font-size:13px;
+}
+
+/* MOBILE */
+@media(max-width:640px){
+  .hero h1{font-size:40px;}
+  nav{display:none;}
+  .prompt-inner{ padding:12px; }
+  .right-actions{ gap:8px; }
+  .plan-badge{ display:none; }
+  .popover{ left:auto; right:0; }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="navbar">
+    <div class="brand">
+      <div class="brand-badge"></div>
+      Design App
+    </div>
+
+    <nav>
+      <a href="#">Home</a>
+      <a href="#">Pricing</a>
+      <a href="#">About</a>
+      <a href="#">Careers</a>
+    </nav>
+
+    <div class="nav-right">
+      <a href="{{ url_for('signin') }}">Sign in</a>
+      <a href="{{ url_for('signup') }}" class="primary">Get started</a>
+    </div>
+  </div>
+</header>
+
+<section class="hero">
+  <h1>Build apps, websites & games in 30 seconds.</h1>
+  <p>Type an idea. Get a working, visually impressive preview instantly — no code needed.</p>
+
+  <div class="prompt">
+    <div class="prompt-inner">
+      <span class="lockwrap" id="attachWrap">
+        <button class="icon-btn" id="attachBtn" type="button" title="Add image">+</button>
+
+        <div class="popover" id="unlockPopoverAttach" aria-hidden="true">
+          <div class="t">Unlock more features</div>
+          <div class="d">Attach files and images, apply themes, connect integrations, and more by signing in.</div>
+          <div class="cta"><a href="{{ url_for('signin') }}">Sign in</a></div>
+        </div>
+      </span>
+
+      <input id="fileInput" type="file" accept="image/*" hidden />
+
+      <div class="textwrap">
+        <div class="ph" id="ph"><span id="phText"></span><span class="caret">|</span></div>
+        <textarea
+          id="promptInput"
+          class="prompt-text"
+          rows="1"
+          placeholder="Describe what you want to build…"
+          aria-label="Prompt"
+        ></textarea>
+      </div>
+
+      <div class="right-actions">
+        <span class="plan-badge">Plan</span>
+
+        <span class="lockwrap" id="micWrap">
+          <button class="icon-btn mic" id="micBtn" type="button" title="Voice input" aria-label="Voice input">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M12 14a3 3 0 0 0 3-3V6a3 3 0 1 0-6 0v5a3 3 0 0 0 3 3Z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+              <path d="M19 11a7 7 0 0 1-14 0" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+              <path d="M12 18v3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+            </svg>
+          </button>
+
+          <div class="popover" id="unlockPopoverMic" aria-hidden="true" style="left:auto; right:0;">
+            <div class="t">Unlock more features</div>
+            <div class="d">Enable voice mode, attach images, and access advanced tools by signing in.</div>
+            <div class="cta"><a href="{{ url_for('signin') }}">Sign in</a></div>
+          </div>
+        </span>
+
+        <button class="send-btn" id="sendBtn" type="button" aria-label="Generate" disabled>↑</button>
+      </div>
+    </div>
+
+    <div class="prompt-hint">
+      First preview is free. Edits &amp; new generations require a plan.
+    </div>
+  </div>
+</section>
+
+<script>
+/**
+ * Koppla denna från backend:
+ * const IS_AUTH = {{ 'true' if current_user.is_authenticated else 'false' }};
+ */
+const IS_AUTH = false;
+
+// Routes
+const SIGNUP_URL = "{{ url_for('signup') }}";
+const SIGNIN_URL = "{{ url_for('signin') }}";
+const AFTER_LOGIN_NEXT = "/builder";
+
+/* Autosize + Send state */
+const ta = document.getElementById("promptInput");
+const sendBtn = document.getElementById("sendBtn");
+
+function autosize(){
+  ta.style.height = "auto";
+  ta.style.height = Math.min(ta.scrollHeight, 140) + "px";
+}
+
+function updateSendState(){
+  const hasText = ta.value.trim().length > 0;
+  sendBtn.disabled = !hasText;
+}
+
+ta.addEventListener("input", () => {
+  autosize();
+  togglePlaceholder();
+  updateSendState();
+});
+
+window.addEventListener("load", () => {
+  autosize();
+  togglePlaceholder();
+  updateSendState();
+});
+
+/* Enter to send, Shift+Enter newline */
+ta.addEventListener("keydown", function(e){
+  if(e.key === "Enter" && !e.shiftKey){
+    e.preventDefault();
+    if(!sendBtn.disabled){
+      handleGenerate();
+    }
+  }
+});
+
+/* Typing placeholder */
+const ph = document.getElementById("ph");
+const phText = document.getElementById("phText");
+
+const prompts = [
+  "Ask us to create a Roblox-style obby with neon checkpoints…",
+  "Ask us to create a landing page for your business…",
+  "Ask us to create a habit tracker app with streaks…",
+  "Ask us to create a 2D platformer game with power-ups…",
+  "Ask us to create a website with pricing + booking…"
+];
+
+let i = 0, j = 0, deleting = false;
+
+function togglePlaceholder(){
+  const hasValue = ta.value.trim().length > 0;
+  const focused = document.activeElement === ta;
+  ph.style.display = (hasValue || focused) ? "none" : "block";
+}
+ta.addEventListener("focus", togglePlaceholder);
+ta.addEventListener("blur", togglePlaceholder);
+
+function tick(){
+  const shouldRun = ta.value.trim().length === 0 && document.activeElement !== ta;
+  if(!shouldRun){
+    setTimeout(tick, 120);
+    return;
+  }
+
+  const current = prompts[i];
+  if(!deleting){
+    j++;
+    phText.textContent = current.slice(0, j);
+    if(j >= current.length){
+      deleting = true;
+      setTimeout(tick, 1000);
+      return;
+    }
+  } else {
+    j--;
+    phText.textContent = current.slice(0, j);
+    if(j <= 0){
+      deleting = false;
+      i = (i + 1) % prompts.length;
+      setTimeout(tick, 220);
+      return;
+    }
+  }
+  setTimeout(tick, deleting ? 22 : 26);
+}
+tick();
+
+/* Lock logic: + and mic disabled when not auth. Hover popover still works. */
+const attachBtn = document.getElementById("attachBtn");
+const micBtn = document.getElementById("micBtn");
+
+function setLocked(btn, locked){
+  if(locked){
+    btn.classList.add("locked");
+    btn.setAttribute("aria-disabled", "true");
+    btn.addEventListener("click", blockClick, true);
+  } else {
+    btn.classList.remove("locked");
+    btn.removeAttribute("aria-disabled");
+    btn.removeEventListener("click", blockClick, true);
+  }
+}
+function blockClick(e){
+  e.preventDefault();
+  e.stopPropagation();
+}
+
+setLocked(attachBtn, !IS_AUTH);
+setLocked(micBtn, !IS_AUTH);
+
+/* Send button is the only one that should work when logged out */
+sendBtn.addEventListener("click", handleGenerate);
+
+function handleGenerate(){
+  if(sendBtn.disabled) return;
+
+  const value = ta.value.trim();
+  if(!value){ ta.focus(); return; }
+
+  localStorage.setItem("pending_prompt", value);
+
+  if(!IS_AUTH){
+    const url = SIGNUP_URL
+      + "?next=" + encodeURIComponent(AFTER_LOGIN_NEXT)
+      + "&prompt=" + encodeURIComponent(value);
+    window.location.href = url;
+    return;
+  }
+
+  alert("Authenticated generate: " + value);
+}
+</script>
+
+</body>
+</html>

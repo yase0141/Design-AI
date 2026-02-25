@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Upgrade Plan</title>
+
+<style>
+body{
+margin:0;
+font-family:ui-sans-serif;
+background:linear-gradient(135deg,#0b0017,#2b045a);
+color:white;
+display:flex;
+justify-content:center;
+align-items:center;
+height:100vh;
+}
+
+.container{
+display:flex;
+gap:40px;
+}
+
+.card{
+background:rgba(255,255,255,0.08);
+padding:40px;
+border-radius:20px;
+width:260px;
+text-align:center;
+backdrop-filter:blur(20px);
+border:1px solid rgba(255,255,255,0.1);
+}
+
+h2{margin-bottom:10px;}
+.price{font-size:28px;margin:20px 0;}
+
+button{
+padding:12px 24px;
+border:none;
+border-radius:12px;
+font-weight:600;
+cursor:pointer;
+background:linear-gradient(135deg,#ff18c8,#8a49ff);
+color:white;
+}
+
+button:hover{opacity:.85;}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="card">
+<h2>Free</h2>
+<div class="price">0 kr</div>
+<p>5 generations</p>
+</div>
+
+<div class="card">
+<h2>Pro</h2>
+<div class="price">199 kr / month</div>
+<p>100 generations</p>
+<a href="/upgrade/pro"><button>Upgrade</button></a>
+</div>
+
+<div class="card">
+<h2>Ultimate</h2>
+<div class="price">499 kr / month</div>
+<p>Unlimited</p>
+<a href="/upgrade/ultimate"><button>Upgrade</button></a>
+</div>
+
+</div>
+
+</body>
+</html>
